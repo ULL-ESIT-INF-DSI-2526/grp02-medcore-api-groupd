@@ -8,3 +8,4 @@
 **Badges del proyecto:**
 [![CI Tests](https://github.com/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/actions/workflows/ci.yml/badge.svg)](https://github.com/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/badge.svg?branch=main)](https://coveralls.io/github/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd?branch=main)
+[![CodeQL Analysis](https://github.com/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/actions/workflows/codeql.yml/badge.svg)](https://github.com/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/actions/workflows/codeql.yml)
