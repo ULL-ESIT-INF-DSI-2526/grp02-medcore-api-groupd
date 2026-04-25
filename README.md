@@ -1,1 +1,6 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/JMUAIOxt)
+# Proyecto grupal 2 - API Rest MedCore
+
+**Asignatura:** Desarrollo de Sistemas Informáticos  
+**Alumnos:** Pablo Pérez Hernández, Diego Prieto González y Eduardo Zúñiga Alarcó
+
+**Correo:** [alu0101619002@ull.edu.es], [alu0101478340@ull.edu.es] y [alu0101637853@ull.edu.es]
