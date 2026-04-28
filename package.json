@@ -19,7 +19,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/ULL-ESIT-INF-DSI-2526/grp02-medcore-api-groupd/issues"
   },
