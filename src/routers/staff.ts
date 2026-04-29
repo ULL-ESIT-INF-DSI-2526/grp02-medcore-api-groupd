@@ -1,7 +1,10 @@
 import {app} from '../app.js';
+import { Router } from 'express';
 
-const port = process.env.PORT || 3000;
+const staffRouter = Router();
 
-app.get('/staff', (req, res) => {
-  res.send('Staff route');
+staffRouter.get('/', (req, res) => {
+    res.send('Staff endpoint');
 });
+
+export default staffRouter;
