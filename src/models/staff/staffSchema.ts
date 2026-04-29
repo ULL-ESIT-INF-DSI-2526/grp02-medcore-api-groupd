@@ -2,6 +2,7 @@ import {Schema, model} from 'mongoose';
 import Staff from './staffInterface.js';
 
 const StaffSchema = new Schema<Staff>({
+    medicalLicenseNumber: {type: Number, required: true, unique: true},
     name: {type: String, required: true},
     specialty: {type: String, enum: ["medicina general", "cardiología", "traumatología", "pediatría", "oncología", "urgencias"], required: true},
     professionalCategory: {type: String, enum: ["médico adjunto", "médico residente", "enfermero", "auxiliar", "jefe de servicio"], required: true},

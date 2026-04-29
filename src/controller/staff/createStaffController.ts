@@ -12,6 +12,7 @@ export async function createStaffController(req : { body: StaffInterface }, res 
     if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ error: 'No data provided' });
     }
+    if (data.medicalLicenseNumber)
     try {
         const result = await createNewStaff(data);
         if (!result) {

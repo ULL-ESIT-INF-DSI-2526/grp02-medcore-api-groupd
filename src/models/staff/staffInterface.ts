@@ -1,5 +1,5 @@
 interface Staff {
-    id : number;
+    medicalLicenseNumber : number;
     name : string;
     specialty : "medicina general" | "cardiología" | "traumatología" | "pediatría" | "oncología" | "urgencias";
     professionalCategory: "médico adjunto" | "médico residente" | "enfermero" | "auxiliar" | "jefe de servicio";
