@@ -1,8 +1,13 @@
 import { connect } from 'mongoose';
 
-try {
-  await connect(process.env.MONGODB_URL!);
-  console.log('Connection to MongoDB server established');
-} catch (error) {
-  console.log(error);
+export async function connectDB() {
+  const url = process.env.MONGODB_URL;
+  if (!url) throw new Error('MONGODB_URL is not defined in environment variables');
+  try {
+    await connect(url, {connectTimeoutMS: 10000});
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    throw error;
+  }
 }
