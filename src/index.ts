@@ -1,8 +1,5 @@
 import { app } from './app.js';
 import { connectDB } from './db/mongoose.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const port = process.env.PORT || 3000;
 
@@ -15,4 +12,3 @@ const port = process.env.PORT || 3000;
     process.exit(1);
   }
 })();
-
