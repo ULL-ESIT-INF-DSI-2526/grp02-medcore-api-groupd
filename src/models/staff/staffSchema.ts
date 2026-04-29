@@ -16,4 +16,4 @@ const StaffSchema = new Schema<Staff>({
     state: {type: String, enum: ["activo", "inactivo"], required: true}
 });
 
-export default model<Staff>('Staff', StaffSchema);
+export const Staff = model<Staff>('Staff', StaffSchema);

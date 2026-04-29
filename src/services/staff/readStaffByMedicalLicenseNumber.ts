@@ -1,4 +1,4 @@
-import Staff from '../../models/staff/staffSchema.js'
+import {Staff} from '../../models/staff/staffSchema.js'
 
 export async function readStaffByMedicalLicenseNumber(medicalLicenseNumber: number) {
     try {
