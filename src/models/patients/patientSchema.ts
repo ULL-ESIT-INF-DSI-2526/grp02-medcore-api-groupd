@@ -48,7 +48,6 @@ const patientSchema = new Schema({
     enum: ['male', 'female', 'other'],
   },
   contactData: {
-    required: true,
     address: {
       type: String,
       required: true,
