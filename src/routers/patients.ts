@@ -5,7 +5,6 @@ import { getPatients } from '../controller/patients/getPatient.controller.js';
 export const patientRouter = Router();
 
 patientRouter.post('/patients', (req, res) => {
-  console.log('Crear paciente');
   createPatient(req, res);
 });
 
