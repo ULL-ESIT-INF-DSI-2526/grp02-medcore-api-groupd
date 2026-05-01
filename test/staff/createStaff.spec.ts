@@ -27,17 +27,19 @@ describe('Pruebas para el controlador de creación de personal', () => {
   });
 
   const validStaff = {
-    medicalLicenseNumber: 123456,
-    name: 'Juan Pérez',
-    birthDate: '1990-05-15',
-    SSId: '123456789012',
-    gender: 'male',
-    bloodType: 'A+',
-    contactData: {
-      address: 'Calle Falsa',
-      phoneNumber: '600123456',
-      email: 'juan@test.com',
-    },
+
+  medicalLicenseNumber: 1,
+  name: "string",
+  specialty: "cardiología",
+  professionalCategory: "médico adjunto",
+  turn: "mañana",
+  floor: 1,
+  yearsOfExperience: 1,
+  departmentContactData: {
+    phone: "string",
+    email: "string"
+  },
+  state: "activo"
   };
 
   test('Debe guardar el miembro del personal y devolver 201', async () => {

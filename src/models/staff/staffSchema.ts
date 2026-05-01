@@ -1,8 +1,20 @@
 import {Schema, model} from 'mongoose';
 import Staff from './staffInterface.js';
 
+import validator from 'validator';
+
 const StaffSchema = new Schema<Staff>({
-    medicalLicenseNumber: {type: Number, required: true, unique: true},
+    medicalLicenseNumber: {
+        type: Number,
+        required: true,
+        unique: true,
+        validate: {
+            validator: (value : string) => {
+                return (validator.isNumeric(value););
+            },
+            message : "No es número válido de licencia"
+        },
+    },
     name: {type: String, required: true},
     specialty: {type: String, enum: ["medicina general", "cardiología", "traumatología", "pediatría", "oncología", "urgencias"], required: true},
     professionalCategory: {type: String, enum: ["médico adjunto", "médico residente", "enfermero", "auxiliar", "jefe de servicio"], required: true},
