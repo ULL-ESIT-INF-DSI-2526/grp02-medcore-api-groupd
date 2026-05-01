@@ -4,3 +4,6 @@ docs
 coverage
 eslint.config.mjs
 .env
+mongodb/
+mongodb-data/
+bin/

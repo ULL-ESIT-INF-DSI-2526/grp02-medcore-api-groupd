@@ -14,7 +14,7 @@ const patientSchema = new Schema({
           validator.isPassportNumber(value, 'ES')
         );
       },
-      message: 'El documento introcudido no es un documento valido (DNI o NIE)',
+      message: 'El documento introducido no es un documento valido (DNI o NIE)',
     },
   },
   name: {
