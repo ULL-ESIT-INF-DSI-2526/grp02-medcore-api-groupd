@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { createPatient } from '../controller/patients/createPatient.controller.js';
 import { getPatients } from '../controller/patients/getPatient.controller.js';
 import { getPatientById } from '../controller/patients/getPatientById.controller.js';
+import { modifyPatient } from '../controller/patients/modifyPatient.controller.js';
 
 export const patientRouter = Router();
 
@@ -15,4 +16,8 @@ patientRouter.get('/patients', (req, res) => {
 
 patientRouter.get('/patients/:id', (req, res) => {
   getPatientById(req, res);
+});
+
+patientRouter.patch('/patients/:id', (req, res) => {
+  modifyPatient(req, res);
 });
