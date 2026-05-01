@@ -1,6 +1,10 @@
 import { BloodType } from './bloodType.js';
 import { ContactData, EmergencyContact } from './contactData.js';
 
+/**
+ * Interfaz que representa un paciente en el sistema. Contiene información personal,
+ * datos de contacto, alergias conocidas, tipo de sangre, estado del paciente y contactos de emergencia.
+ */
 export interface IntPatient {
   idenNumber: string;
   name: string;
