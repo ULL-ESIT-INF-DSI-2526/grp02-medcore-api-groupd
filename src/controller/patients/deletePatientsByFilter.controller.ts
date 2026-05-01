@@ -38,7 +38,7 @@ export async function deletePatientsByFilter(req: Request, res: Response) {
 
     const result = await Patient.deleteMany(filter);
 
-    if (!result) {
+    if (result.deletedCount === 0) {
       return res
         .status(404)
         .json({ error: 'Nothing to delete with this criteria' });
