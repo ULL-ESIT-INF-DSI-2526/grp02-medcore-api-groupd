@@ -23,7 +23,10 @@ export async function modifyPatient(req: Request, res: Response) {
     }
 
     return res.status(200).json(updatedPatient);
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({
       error:
         error instanceof Error

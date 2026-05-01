@@ -50,6 +50,7 @@ describe('Pruebas para comprobar el funcionamiento del controlador de getPatient
 
   beforeAll(async () => {
     await connectDB();
+    await Patient.deleteMany();
     await Patient.create([paciente1, paciente2, paciente3]);
   });
 
