@@ -76,7 +76,7 @@ describe('Pruebas para comprobar el funcionamiento del controlador modifyPatient
   });
 
   test('Debe devolver un error 404 si no se encuentra un paciente con el id', async () => {
-    const res = await request(app).get('/patients/69f473e840f5b1f3cd7852f7');
+    const res = await request(app).patch('/patients/69f473e840f5b1f3cd7852f7');
 
     expect(res.status).toBe(404);
     expect(res.body.error).toEqual(
@@ -85,7 +85,7 @@ describe('Pruebas para comprobar el funcionamiento del controlador modifyPatient
   });
 
   test('Debe devolver un error 400 si no se especifica un id valido para MongoDB', async () => {
-    const res = await request(app).get('/patients/789');
+    const res = await request(app).patch('/patients/789');
 
     expect(res.status).toBe(400);
     expect(res.body.error).toEqual('Invalid MongoDB id format');
