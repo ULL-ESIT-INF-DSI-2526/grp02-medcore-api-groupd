@@ -3,6 +3,7 @@ import { createPatient } from '../controller/patients/createPatient.controller.j
 import { getPatients } from '../controller/patients/getPatient.controller.js';
 import { getPatientById } from '../controller/patients/getPatientById.controller.js';
 import { modifyPatient } from '../controller/patients/modifyPatient.controller.js';
+import { deletePatient } from '../controller/patients/deletePatient.controller.js';
 
 export const patientRouter = Router();
 
@@ -20,4 +21,8 @@ patientRouter.get('/patients/:id', (req, res) => {
 
 patientRouter.patch('/patients/:id', (req, res) => {
   modifyPatient(req, res);
+});
+
+patientRouter.delete('/patients/:id', (req, res) => {
+  deletePatient(req, res);
 });
