@@ -9,6 +9,8 @@ import StaffInterface from '../../models/staff/staffInterface.js';
  */
 export async function createStaffController(req : { body: StaffInterface }, res : any) {
     const data: StaffInterface = req.body;
+    // temporal
+    console.log(data);
     if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ error: 'No data provided' });
     }

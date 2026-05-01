@@ -1,13 +1,13 @@
-import { readStaffByMedicalLicenseNumber } from '../../services/staff/readStaffByMedicalLicenseNumber.js';
+import { readStaffByMedicalId } from '../../services/staff/readStaffById.js';
 
-export async function readStaffByIdController(req : { params: { medicalLicenseNumber: string } }, res : any) {
+export async function readStaffByIdController(req : { params: { id: string } }, res : any) {
     try {
-        const { medicalLicenseNumber } = req.params;
-        const staff = await readStaffByMedicalLicenseNumber(parseInt(medicalLicenseNumber));
-        if (!staff) {
+        const { id } = req.params;
+        const result = await readStaffByMedicalId(id);
+        if (!result) {
             return res.status(404).json({ error: 'Staff member not found' });
         }
-        return res.status(200).json(staff);
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ error: 'Server error' });
     }
