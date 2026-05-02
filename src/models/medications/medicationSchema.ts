@@ -27,12 +27,12 @@ const medicationSchema = new Schema({
     },
   },
   natCode: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
     validate: {
-      validator: (value: number) => {
-        return (value >= 0 && value.toString().length === 6);
+      validator: (value: string) => {
+        return /^\d{6}$/.test(value);
       },
       message: `El codigo nacional debe ser de 6 digitos`,
     },
