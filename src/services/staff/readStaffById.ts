@@ -1,10 +1,16 @@
 import {Staff} from '../../models/staff/staffSchema.js'
+import mongoose from 'mongoose';
 
-export async function readStaffByMedicalId(id: string) {
+/**
+ * 
+ * @param id - Identificador para la base de datos
+ * @returns - Retorna o un error o el miembro del personal encontrado por su ID médico.
+ */
+export async function readStaffById(id: mongoose.Types.ObjectId) {
     try {
-        const staff = await Staff.findById(id);
-        return staff;
+        const data = await Staff.findById(id);
+        return data;
     } catch (error) {
-        throw new Error('Error reading staff by ID');
+        return error;
     }
 }
