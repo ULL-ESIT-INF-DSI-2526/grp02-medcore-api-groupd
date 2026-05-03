@@ -9,8 +9,8 @@ const StaffSchema = new Schema<Staff>({
         required: true,
         unique: true,
         validate: {
-            validator: (value : string) => {
-                return validator.isNumeric(value);
+            validator: (value : number) => {
+                return Number.isInteger(value) && value > 0;
             },
             message : "No es número válido de licencia"
         },

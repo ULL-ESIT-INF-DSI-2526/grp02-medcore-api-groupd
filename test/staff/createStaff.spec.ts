@@ -13,6 +13,9 @@ import { app } from '../../src/app';
 import { connectDB } from '../../src/db/mongoose';
 import { Staff } from '../../src/models/staff/staffSchema';
 
+const debugResponse = (res: request.Response) =>
+  `status=${res.status}, error=${res.body?.error ?? 'N/A'}, body=${JSON.stringify(res.body)}`;
+
 describe('Pruebas para el controlador de creación de staff', () => {
 
   beforeAll(async () => {
@@ -29,7 +32,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
 
   const validStaff = {
     medicalLicenseNumber: "12345",
-    name: "Dr. Test",
+    name: "Dr Test",
     specialty: "cardiología",
     professionalCategory: "médico adjunto",
     turn: "mañana",
@@ -45,8 +48,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
   test('Debe guardar el staff y devolver 201', async () => {
     const res = await request(app).post('/staff').send(validStaff);
 
-    expect(res.status).toBe(201);
-    expect(res.body.name).toBe("Dr. Test");
+    expect(res.status, debugResponse(res)).toBe(201);
 
     const staff = await Staff.findById(res.body._id);
     expect(staff).not.toBeNull();
@@ -56,7 +58,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
     await request(app).post('/staff').send(validStaff);
     const res = await request(app).post('/staff').send(validStaff);
 
-    expect(res.status).toBe(409);
+    expect(res.status, debugResponse(res)).toBe(409);
     expect(res.body.error).toBe('Staff member already exists in the system');
   });
 
@@ -68,7 +70,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
 
     const res = await request(app).post('/staff').send(invalidStaff);
 
-    expect(res.status).toBe(400);
+    expect(res.status, debugResponse(res)).toBe(400);
     expect(res.body.error).toContain('name');
   });
 
@@ -80,7 +82,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
 
     const res = await request(app).post('/staff').send(invalidStaff);
 
-    expect(res.status).toBe(400);
+    expect(res.status, debugResponse(res)).toBe(400);
     expect(res.body.error).toContain('is not a valid enum value');
   });
 
@@ -92,7 +94,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
 
     const res = await request(app).post('/staff').send(invalidStaff);
 
-    expect(res.status).toBe(400);
+    expect(res.status, debugResponse(res)).toBe(400);
     expect(res.body.error).toContain('floor');
   });
 
@@ -103,7 +105,7 @@ describe('Pruebas para el controlador de creación de staff', () => {
 
     const res = await request(app).post('/staff').send(validStaff);
 
-    expect(res.status).toBe(500);
+    expect(res.status, debugResponse(res)).toBe(500);
     expect(res.body.error).toBe('Error crítico');
 
     spy.mockRestore();

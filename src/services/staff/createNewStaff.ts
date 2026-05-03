@@ -7,12 +7,7 @@ import StaffInterface from '../../models/staff/staffInterface.js';
  * @returns Falso en caso de 
  */
 export async function createNewStaff(staff : StaffInterface) {
-   try {
     const newStaff = new Staff(staff);
     const data = await newStaff.save();
     return data;
-   }
-    catch (error) {
-        return error;
-    }
 }

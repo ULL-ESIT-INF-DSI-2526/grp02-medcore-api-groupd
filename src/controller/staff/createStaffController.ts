@@ -8,15 +8,13 @@ import StaffInterface from '../../models/staff/staffInterface.js';
  * @returns 
  */
 import mongoose from 'mongoose';
-import { Staff } from '../../models/staff/staffSchema.js';
 import { Request, Response } from 'express';
 
 export async function createStaffController(req: Request, res: Response) {
   try {
-    const newStaff = new Staff(req.body);
-    await newStaff.save();
+    const createdStaff = await createNewStaff(req.body as StaffInterface);
 
-    return res.status(201).json(newStaff);
+    return res.status(201).json(createdStaff);
 
   } catch (error: unknown) {
 
