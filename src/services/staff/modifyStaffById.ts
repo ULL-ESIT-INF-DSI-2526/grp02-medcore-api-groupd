@@ -12,6 +12,6 @@ export async function modifyStaffById(id : string, staffData : Partial<iStaff>) 
         return result;
     }
     catch (error) {
-        return error;
+        throw error;
     }
 }

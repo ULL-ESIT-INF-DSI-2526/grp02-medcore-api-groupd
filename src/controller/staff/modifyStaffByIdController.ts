@@ -1,27 +1,36 @@
-import iStaff  from '../../models/staff/staffInterface.js';
+import { Request, Response } from 'express';
+import mongoose from 'mongoose';
+import iStaff from '../../models/staff/staffInterface.js';
 import { modifyStaffById } from '../../services/staff/modifyStaffById.js';
-import { Response } from 'express';
-/**
- * Controlador para modificar un miembro del personal por su ID médico.
- * @param req - Request, se espera que los parámetros de la ruta contengan el ID del miembro del personal a modificar y el cuerpo de la solicitud contenga los datos a modificar.
- * @param res - Response
- * @returns Rerorna un error o el miembro del personal modificado por su ID médico.
- */
-export async function modifyStaffByIdController(req : { params: { id: string }, body: Partial<iStaff> }, res : Response) {
-    try {
-        const id : string = req.params.id;
-        const staffData : Partial<iStaff> = req.body;
-        const result = await modifyStaffById(id, staffData);
-        if (!result) {
-            return res.status(404).json({ error: 'Staff member not found' });
-        }
-        return res.status(200).json(result);
-    } catch (error : unknown) {
-        if (error instanceof Error) {
-            return res.status(500).json({ error: error.message });
-        }
-        if (error instanceof Error) {
-            return res.status(500).json({ error: error.message });
-        }
+
+export async function modifyStaffByIdController(
+  req: Request<{ id: string }, {}, Partial<iStaff>>,
+  res: Response
+) {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid ID format' });
     }
+
+    const result = await modifyStaffById(id, req.body);
+
+    if (!result) {
+      return res.status(404).json({ error: 'Staff member not found' });
+    }
+
+    return res.status(200).json(result);
+
+  } catch (error: unknown) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (error instanceof Error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
 }

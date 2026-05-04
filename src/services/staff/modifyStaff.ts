@@ -8,10 +8,10 @@ import iStaff  from '../../models/staff/staffInterface.js';
  */
 export async function modifyStaff(filter : Partial<iStaff>, staffData : Partial<iStaff>) {
     try {
-        const result = await Staff.findOneAndUpdate(filter, {$set: staffData}, { new: true });
-        return result;
+    // Necesita runValidators para que se apliquen las validaciones del schema al actualizar por filtro, ya que por id se hace con findByIdAndUpdate y ahí sí se aplican las validaciones.
+    const result = await Staff.findOneAndUpdate(filter, {$set: staffData}, { new: true, runValidators: true });        return result;
     }
     catch (error) {
-        return error;
+        throw error;
     }
 }

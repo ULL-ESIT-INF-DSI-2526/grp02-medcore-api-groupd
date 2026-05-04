@@ -17,7 +17,7 @@ staffRouter.get('/:id', (req, res) => {readStaffByIdController(req, res);});
 staffRouter.get('/', (req, res) => {readStaffController(req, res);});
 
 // Update por id
-staffRouter.put('/:id', (req, res) => {modifyStaffByIdController(req, res);});
+staffRouter.patch('/:id', (req, res) => {modifyStaffByIdController(req, res);});
 // Update por filtro
-staffRouter.put('/', (req, res) => {modifyStaffController(req, res);});
+staffRouter.patch('/', (req, res) => {modifyStaffController(req, res);});
 export default staffRouter;

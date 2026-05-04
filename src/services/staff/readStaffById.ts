@@ -11,6 +11,6 @@ export async function readStaffById(id: mongoose.Types.ObjectId) {
         const data = await Staff.findById(id);
         return data;
     } catch (error) {
-        return error;
+        throw error;
     }
 }
