@@ -1,4 +1,4 @@
-import type { StaffFilter } from '../../models/staff/types/StaffFilter.js';
+import type iStaff  from '../../models/staff/staffInterface.js';
 import {Staff} from '../../models/staff/staffSchema.js'
 
 /**
@@ -6,7 +6,7 @@ import {Staff} from '../../models/staff/staffSchema.js'
  * @param filter - Filtro de tipo StaffFilter que contien los posibles query string que haya puesto el usuario.
  * @returns Puede retornar o error la data esperada.
  */
-export async function readStaff(filter : StaffFilter) {
+export async function readStaff(filter : Partial<iStaff>) {
     try {
         const data = await Staff.find(filter);
         return data;
