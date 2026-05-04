@@ -64,7 +64,7 @@ describe('Pruebas para readStaffByIdController', () => {
   test('Debe devolver 500 si ocurre un error interno', async () => {
     const validId = new mongoose.Types.ObjectId();
     const spy = vi
-      .spyOn(staffService, 'readStaffByMedicalId')
+      .spyOn(staffService, 'readStaffById')
       .mockRejectedValueOnce(new Error('Fallo interno'));
 
     const res = await request(app).get(`/staff/${validId}`);
