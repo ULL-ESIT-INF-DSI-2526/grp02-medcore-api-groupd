@@ -8,7 +8,7 @@ import iStaff  from '../../models/staff/staffInterface.js';
  */
 export async function deleteStaff(filter : Partial<iStaff>) {
     try {
-        const result = await Staff.findOneAndDelete(filter);
+        const result = await Staff.findOneAndDelete(filter, { runValidators: true });
         return result;
     } catch (error) {
         throw error;

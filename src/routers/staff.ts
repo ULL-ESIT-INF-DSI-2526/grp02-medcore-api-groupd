@@ -5,6 +5,7 @@ import { readStaffController } from '../controller/staff/readStaffController.js'
 import { modifyStaffByIdController } from '../controller/staff/modifyStaffByIdController.js';
 import { modifyStaffController } from '../controller/staff/modifyStaffController.js';
 import { deleteStaffByIdController } from '../controller/staff/deleteStaffByIdController.js';
+import { deleteStaffController } from '../controller/staff/deleteStaffController.js';
 
 const staffRouter = Router();
 
@@ -23,4 +24,6 @@ staffRouter.patch('/:id', (req, res) => {modifyStaffByIdController(req, res);});
 staffRouter.patch('/', (req, res) => {modifyStaffController(req, res);});
 // delete por id
 staffRouter.delete('/:id', (req, res) => {deleteStaffByIdController(req, res);});
+// delete por filtro
+staffRouter.delete('/', (req, res) => {deleteStaffController(req, res);});
 export default staffRouter;
