@@ -3,6 +3,7 @@ import { createStaffController } from '../controller/staff/createStaffController
 import { readStaffByIdController } from '../controller/staff/readStaffByIdController.js';
 import { readStaffController } from '../controller/staff/readStaffController.js';
 import { modifyStaffByIdController } from '../controller/staff/modifyStaffByIdController.js';
+import { modifyStaffController } from '../controller/staff/modifyStaffController.js';
 
 const staffRouter = Router();
 
@@ -17,4 +18,6 @@ staffRouter.get('/', (req, res) => {readStaffController(req, res);});
 
 // Update por id
 staffRouter.put('/:id', (req, res) => {modifyStaffByIdController(req, res);});
+// Update por filtro
+staffRouter.put('/', (req, res) => {modifyStaffController(req, res);});
 export default staffRouter;
