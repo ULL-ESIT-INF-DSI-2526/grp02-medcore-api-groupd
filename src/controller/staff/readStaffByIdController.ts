@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Response } from 'express';
 import { readStaffById } from '../../services/staff/readStaffById.js';
 /**
  * 
@@ -6,7 +7,7 @@ import { readStaffById } from '../../services/staff/readStaffById.js';
  * @param res - Response
  * @returns Retorna un error o el miembro del personal encontrado por su ID médico.
  */
-export async function readStaffByIdController(req : { params: { id: string } }, res : any) {
+export async function readStaffByIdController(req : { params: { id: string } }, res : Response) {
     try {
         const { id } = req.params;
         const objectId_ = new mongoose.Types.ObjectId(id);

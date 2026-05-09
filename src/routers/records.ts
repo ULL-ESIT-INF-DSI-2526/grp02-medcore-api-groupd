@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { createRecord } from '../controller/record/createRecord.controller.js';
 import { readRecordController } from '../controller/record/readRecord.controller.js';
+import { readRecordByIdController } from '../controller/record/readRecordById.controller.js';
 
 export const recordRouter = Router();
 
@@ -11,3 +12,5 @@ recordRouter.post('/records', (req, res) => {
 recordRouter.get('/', (req, res) => {
   readRecordController(req, res);
 });
+
+recordRouter.get('/:id', readRecordByIdController);
