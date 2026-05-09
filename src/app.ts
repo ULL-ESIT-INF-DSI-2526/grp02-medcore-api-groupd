@@ -11,4 +11,4 @@ app.use(express.json());
 app.use('/staff', staffRouter);
 app.use(patientRouter);
 app.use('/medications', medicationRouter);
-app.use('/record', recordRouter);
+app.use(recordRouter);
