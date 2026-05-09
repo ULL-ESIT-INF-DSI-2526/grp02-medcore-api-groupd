@@ -1,14 +1,26 @@
-import { readStaffByMedicalLicenseNumber } from '../../services/staff/readStaffByMedicalLicenseNumber.js';
-
-export async function readStaffByIdController(req : { params: { medicalLicenseNumber: string } }, res : any) {
+import mongoose from 'mongoose';
+import { readStaffById } from '../../services/staff/readStaffById.js';
+/**
+ * 
+ * @param req - Request
+ * @param res - Response
+ * @returns Retorna un error o el miembro del personal encontrado por su ID médico.
+ */
+export async function readStaffByIdController(req : { params: { id: string } }, res : any) {
     try {
-        const { medicalLicenseNumber } = req.params;
-        const staff = await readStaffByMedicalLicenseNumber(parseInt(medicalLicenseNumber));
-        if (!staff) {
+        const { id } = req.params;
+        const objectId_ = new mongoose.Types.ObjectId(id);
+        const result = await readStaffById(objectId_);
+        if (!result) {
             return res.status(404).json({ error: 'Staff member not found' });
         }
-        return res.status(200).json(staff);
-    } catch (error) {
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(200).json(result);
+    } catch (error : unknown) {
+        if (error instanceof mongoose.Error.CastError) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+        if (error instanceof Error) {
+            return res.status(500).json({ error: error.message });
+        }
     }
 }
