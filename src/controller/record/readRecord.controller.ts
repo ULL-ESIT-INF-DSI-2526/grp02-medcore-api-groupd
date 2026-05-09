@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { RecordFilter } from '../../models/records/types/recordFilter.js';
-import { readRecords } from '../../services/record/readRecord.js';
+import { readRecord } from '../../services/record/readRecord.js';
 import mongoose from 'mongoose';
 
 /**
@@ -9,14 +9,14 @@ import mongoose from 'mongoose';
  * @param res - Response
  * @returns Retorna una lista de registros que coinciden con los filtros aplicados.
  */
-export async function readRecordsController(req: Request, res: Response) {
+export async function readRecordController(req: Request, res: Response) {
   try {
     const {patient, doctor} = req.query;
     const filter = {} as RecordFilter;
-    if (typeof patient === 'string') filter.patient = patient;
-    if (typeof doctor === 'string') filter.doctor = doctor;
+    if (typeof patient === 'string' && mongoose.isValidObjectId(patient)) filter.patient = patient;
+    if (typeof doctor === 'string' && mongoose.isValidObjectId(doctor)) filter.doctor = doctor;
 
-    const result = await readRecords(filter);
+    const result = await readRecord(filter);
     return res.status(200).json(result);
   } catch (error : unknown) {
     if (error instanceof mongoose.Error.ValidationError) {

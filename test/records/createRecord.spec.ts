@@ -51,7 +51,7 @@ describe('Pruebas para el controlador de createRecord', () => {
 
   const mockDoctorActive = {
     medicalLicenseNumber: 11111,
-    name: 'Dr. House',
+    name: 'Dr House',
     specialty: 'medicina general',
     professionalCategory: 'médico adjunto',
     turn: 'mañana',
@@ -63,7 +63,7 @@ describe('Pruebas para el controlador de createRecord', () => {
   const mockDoctorInactive = {
     ...mockDoctorActive,
     medicalLicenseNumber: 22222,
-    name: 'Dr. Nick',
+    name: 'Dr Nick',
     state: 'inactivo',
   };
 
@@ -165,7 +165,7 @@ describe('Pruebas para el controlador de createRecord', () => {
   });
 
   test('Debe devolver 400 si el médico está inactivo', async () => {
-    const body = { ...validRecordBody, medicalLicenseNumber: 22222 }; // ID de Dr. Nick
+    const body = { ...validRecordBody, medicalLicenseNumber: 22222 };
     const res = await request(app).post('/records').send(body);
 
     expect(res.status).toBe(400);
