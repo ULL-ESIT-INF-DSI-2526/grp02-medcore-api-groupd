@@ -166,7 +166,7 @@ describe('Pruebas para el controlador de creación de pacientes', () => {
 
       expect(res.status).toBe(400);
       expect(res.body.error).toContain(
-        'El documento introcudido no es un documento valido (DNI o NIE)',
+        'Patient validation failed: idenNumber: El documento introducido no es un documento valido (DNI o NIE)',
       );
     });
 

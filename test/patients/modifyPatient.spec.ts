@@ -128,7 +128,7 @@ describe('Pruebas para comprobar el funcionamiento del controlador modifyPatient
 
       expect(res.status).toBe(400);
       expect(res.body.error).toContain(
-        'El documento introcudido no es un documento valido',
+        'Validation failed: idenNumber: El documento introducido no es un documento valido (DNI o NIE)',
       );
     });
 
