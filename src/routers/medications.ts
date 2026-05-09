@@ -9,7 +9,7 @@ import { modifyMedication } from '../controller/medications/modifyMedication.con
 
 export const medicationRouter = Router();
 
-medicationRouter.post('/medications', (req, res) => {
+medicationRouter.post('/', (req, res) => {
   createMedication(req, res);
 });
 

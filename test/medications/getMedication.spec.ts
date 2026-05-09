@@ -12,7 +12,7 @@ import { app } from '../../src/app';
 import { connectDB } from '../../src/db/mongoose';
 import { Medication } from '../../src/models/medications/medicationSchema';
 
-describe('Pruebas para el controlador de creación de medicamentos', () => {
+describe('Medication Controller - Read by Query', () => {
   beforeAll(async () => {
     await connectDB();
   });
@@ -25,7 +25,7 @@ describe('Pruebas para el controlador de creación de medicamentos', () => {
     await Medication.deleteMany();
   });
 
-  const med1 = {
+  const medicacionValida = {
     name: 'Rivotril',
     activeIngredient: 'clonazepam',
     natCode: '000000',
@@ -41,27 +41,25 @@ describe('Pruebas para el controlador de creación de medicamentos', () => {
     expiration: '2026-06-06',
   };
 
-  const med_incompleta = {
-    name: 'Rivotril',
-    activeIngredient: 'clonazepam',
-    natCode: '000000',
-    pharmaForm: 'tablet',
-  }
-
   test('Debe guardar el medicamento y devolver 201', async () => {
-    const res = await request(app).post('/medications').send(med1);
+    const res = await request(app).post('/medications').send(medicacionValida);
+
     expect(res.status).toBe(201);
     expect(res.body.name).toBe('Rivotril');
   });
 
-  test('Debe validar los atributos', async () => {
-    med1.natCode = '00000a'
-    const res = await request(app).post('/medications').send(med1);
-    expect(res.status).toBe(400);
+  test('Debe devolver una lista vacia si no coincide', async () => {
+    const res = await request(app).get(`/medications?name=a`);
+    expect(res.status).toBe(404);
+    expect(res.body.error).toEqual('Search query did not match any medication');
   });
 
-  test('Debe rechazar datos incompletos', async () => {
-    const res = await request(app).post('/medications').send(med1);
-    expect(res.status).toBe(400);
+  test('Busqueda correcta', async () => {
+    await request(app).post('/medications').send(medicacionValida);
+    const res = await request(app).get(`/medications?name=Rivo`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].natCode).toBe('000000');
   });
 });

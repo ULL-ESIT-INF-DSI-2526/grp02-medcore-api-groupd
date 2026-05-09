@@ -9,7 +9,7 @@ export async function modifyMedicationbyId(req: Request, res: Response) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'Invalid MongoDB id format' });
     }
-    const medication = await Medication.findByIdAndUpdate(id);
+    const medication = await Medication.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
 
     if (!medication)
       return res.status(404).json({ error: `Medication with id (${id}) not found` });
