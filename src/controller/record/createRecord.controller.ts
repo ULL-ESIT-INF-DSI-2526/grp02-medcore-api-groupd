@@ -73,11 +73,9 @@ export async function createRecord(req: Request, res: Response) {
     }
 
     if (doctor.state === 'inactivo') {
-      return res
-        .status(400)
-        .json({
-          error: `El médico con número ${medNumber} no se encuentra activo`,
-        });
+      return res.status(400).json({
+        error: `El médico con número ${medNumber} no se encuentra activo`,
+      });
     }
 
     let finalMedications: prescribedMed[] = [];
@@ -113,6 +111,8 @@ export async function createRecord(req: Request, res: Response) {
         return res.status(400).json({
           error: `Insufficient stock for medication: ${error.message.split('INSUFFICIENT_STOCK_')[1]}`,
         });
+      } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message });
       } else {
         return res.status(500).json({ error: error.message });
       }
