@@ -2,7 +2,8 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ['test/**/*.spec.ts'], 
+    include: ['test/**/*.spec.ts'],
+    fileParallelism: false,
     globals: true
   },
 });
