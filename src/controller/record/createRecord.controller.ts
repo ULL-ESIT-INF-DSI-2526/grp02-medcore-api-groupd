@@ -94,6 +94,8 @@ export async function createRecord(req: Request, res: Response) {
       diagnosis: req.body.diagnosis,
       medicationList: finalMedications,
       totalPrice: finalCost,
+      endDate: req.body.endDate,
+      status: req.body.status,
     });
 
     return res.status(201).json(newRecord);
