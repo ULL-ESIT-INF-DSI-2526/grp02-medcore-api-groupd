@@ -4,7 +4,6 @@ import {
   expect,
   beforeAll,
   afterAll,
-  vi,
   beforeEach,
 } from 'vitest';
 import request from 'supertest';
