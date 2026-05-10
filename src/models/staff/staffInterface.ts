@@ -1,4 +1,6 @@
-interface Staff {
+import { Document } from 'mongoose';
+
+interface Staff extends Document {
     medicalLicenseNumber : number;
     name : string;
     specialty : "medicina general" | "cardiología" | "traumatología" | "pediatría" | "oncología" | "urgencias";
