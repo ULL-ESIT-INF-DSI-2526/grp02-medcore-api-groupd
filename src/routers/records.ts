@@ -53,7 +53,7 @@ recordRouter.post('/records', (req, res) => {
  *           type: string
  *         description: Filter records by doctor ID
  */
-recordRouter.get('/', (req, res) => {
+recordRouter.get('/records', (req, res) => {
   readRecordController(req, res);
 });
 /**
@@ -78,7 +78,7 @@ recordRouter.get('/', (req, res) => {
  *       400:
  *         description: Invalid request
  */
-recordRouter.get('/:id', readRecordByIdController);
+recordRouter.get('/records/:id', readRecordByIdController);
 
 /**
  * @swagger
