@@ -8,7 +8,7 @@ import iStaff  from '../../models/staff/staffInterface.js';
  */
 export async function modifyStaffById(id : string, staffData : Partial<iStaff>) {
     try {
-        const result = await Staff.findByIdAndUpdate(id, {$set: staffData}, { new: true, runValidators: true });
+        const result = await Staff.findByIdAndUpdate(id, {$set: staffData}, { returnDocument: 'after', runValidators: true });
         return result;
     }
     catch (error) {

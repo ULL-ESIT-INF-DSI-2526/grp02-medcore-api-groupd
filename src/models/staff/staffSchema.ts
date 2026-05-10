@@ -80,19 +80,26 @@ const StaffSchema = new Schema<Staff>({
         },
     },
     departmentContactData: {
-        phone: {type: String, required: false,
-        validate: {
-            validator: (value : string) => {
-                return validator.isMobilePhone(value, 'es-ES');
+        phone: {
+            type: String,
+            required: false,
+            validate: {
+                validator: (value : string) => {
+                    return validator.isMobilePhone(value, 'es-ES');
+                },
+                message : "Número de teléfono no válido"
             },
-            message : "Número de teléfono no válido"
         },
-        email: {type: String, required: false, validate: {
-            validator: (value : string) => {
-                return validator.isEmail(value);
+        email: {
+            type: String,
+            required: false,
+            validate: {
+                validator: (value : string) => {
+                    return validator.isEmail(value);
+                },
+                message : "Correo electrónico no válido"
             },
-            message : "Correo electrónico no válido"
-        }}},
+        },
     },
     state: {type: String, enum: ["activo", "inactivo"], required: true}
 });
