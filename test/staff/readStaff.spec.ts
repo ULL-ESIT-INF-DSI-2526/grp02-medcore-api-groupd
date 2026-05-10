@@ -15,10 +15,9 @@ import { app } from '../../src/app';
 import { connectDB } from '../../src/db/mongoose';
 
 import { Staff } from '../../src/models/staff/staffSchema';
+import * as staffService from '../../src/services/staff/readStaff.js';
 
-import * as staffService from '../../src/services/staff/modifyStaff.js';
-
-describe('Pruebas para modifyStaffController', () => {
+describe('Pruebas para readStaffController', () => {
 
   beforeAll(async () => {
     await connectDB();
@@ -32,227 +31,134 @@ describe('Pruebas para modifyStaffController', () => {
     await Staff.deleteMany();
   });
 
-  const validStaff = {
-    medicalLicenseNumber: 12345,
-    name: 'Dr Test',
+  const doctor1 = {
+    medicalLicenseNumber: 11111,
+    name: 'Dr House',
     specialty: 'cardiología' as const,
     professionalCategory: 'médico adjunto' as const,
     turn: 'mañana' as const,
-    floor: 2,
-    yearsOfExperience: 10,
+    floor: 1,
+    yearsOfExperience: 15,
     departmentContactData: {
-      phone: '600123456',
-      email: 'staff@test.com',
+      phone: '600111111',
+      email: 'house@test.com',
     },
     state: 'activo' as const,
   };
 
-  test('Debe modificar un staff buscándolo por nombre', async () => {
-    await Staff.create(validStaff);
+  const doctor2 = {
+    medicalLicenseNumber: 22222,
+    name: 'Dr Wilson',
+    specialty: 'urgencias' as const,
+    professionalCategory: 'médico residente' as const,
+    turn: 'tarde' as const,
+    floor: 2,
+    yearsOfExperience: 5,
+    departmentContactData: {
+      phone: '600222222',
+      email: 'wilson@test.com',
+    },
+    state: 'activo' as const,
+  };
 
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        yearsOfExperience: 20,
-      });
+  test('Debe devolver 200 y todos los staffs sin filtros', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
 
-    expect(res.status).toBe(200);
-
-    const updatedStaff = await Staff.findOne({
-      name: 'Dr Test',
-    });
-
-    expect(updatedStaff?.yearsOfExperience).toBe(20);
-  });
-
-  test('Debe modificar un staff buscándolo por especialidad', async () => {
-    await Staff.create(validStaff);
-
-    const res = await request(app)
-      .patch('/staff')
-      .query({ specialty: 'cardiología' })
-      .send({
-        floor: 5,
-      });
+    const res = await request(app).get('/staff');
 
     expect(res.status).toBe(200);
-
-    const updatedStaff = await Staff.findOne({
-      specialty: 'cardiología',
-    });
-
-    expect(updatedStaff?.floor).toBe(5);
+    expect(res.body.length).toBe(2);
   });
 
-  test('Debe modificar varios campos a la vez', async () => {
-    await Staff.create(validStaff);
+  test('Debe filtrar por nombre', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
 
     const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        floor: 7,
-        state: 'inactivo',
-        yearsOfExperience: 30,
-      });
+      .get('/staff')
+      .query({ name: 'Dr House' });
 
     expect(res.status).toBe(200);
-
-    const updatedStaff = await Staff.findOne({
-      name: 'Dr Test',
-    });
-
-    expect(updatedStaff?.floor).toBe(7);
-    expect(updatedStaff?.state).toBe('inactivo');
-    expect(updatedStaff?.yearsOfExperience).toBe(30);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].name).toBe('Dr House');
   });
 
-  test('Debe devolver 400 si no se proporciona ningún filtro', async () => {
+  test('Debe filtrar por especialidad', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
+
     const res = await request(app)
-      .patch('/staff')
-      .send({
-        floor: 4,
-      });
+      .get('/staff')
+      .query({ specialty: 'urgencias' });
 
-    expect(res.status).toBe(400);
-
-    expect(res.body.error).toBe(
-      'No valid filter provided',
-    );
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].specialty).toBe('urgencias');
   });
 
-  test('Debe devolver 404 si el staff no existe', async () => {
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'No Existe' })
-      .send({
-        floor: 9,
-      });
-
-    expect(res.status).toBe(404);
-
-    expect(res.body.error).toBe(
-      'Staff not found',
-    );
-  });
-
-  test('Debe devolver 400 si el enum specialty es inválido', async () => {
-    await Staff.create(validStaff);
+  test('Debe filtrar por nombre y especialidad a la vez', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
 
     const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        specialty: 'informatica',
-      });
-
-    expect(res.status).toBe(400);
-
-    expect(res.body.error).toContain(
-      'is not a valid enum value',
-    );
-  });
-
-  test('Debe devolver 400 si yearsOfExperience tiene tipo inválido', async () => {
-    await Staff.create(validStaff);
-
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        yearsOfExperience: 'muchos',
-      });
-
-    expect(res.status).toBe(400);
-  });
-
-  test('Debe devolver 400 si floor tiene tipo inválido', async () => {
-    await Staff.create(validStaff);
-
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        floor: 'segunda planta',
-      });
-
-    expect(res.status).toBe(400);
-  });
-
-  test('Debe devolver 400 si el email es inválido', async () => {
-    await Staff.create(validStaff);
-
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        departmentContactData: {
-          phone: '600123456',
-          email: 'correo-mal-formado',
-        },
-      });
-
-    expect(res.status).toBe(400);
-  });
-
-  test('Debe ignorar query params inválidos y devolver 400', async () => {
-    const res = await request(app)
-      .patch('/staff')
+      .get('/staff')
       .query({
-        floor: 2,
-      })
-      .send({
-        state: 'inactivo',
+        name: 'Dr House',
+        specialty: 'cardiología',
       });
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].name).toBe('Dr House');
+    expect(res.body[0].specialty).toBe('cardiología');
+  });
 
-    expect(res.body.error).toBe(
-      'No valid filter provided',
-    );
+  test('Debe devolver array vacío si no encuentra coincidencias', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
+
+    const res = await request(app)
+      .get('/staff')
+      .query({ name: 'Doctor Inexistente' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  test('Debe ignorar query strings vacíos', async () => {
+    await Staff.insertMany([doctor1, doctor2]);
+
+    const res = await request(app)
+      .get('/staff')
+      .query({
+        name: '',
+        specialty: '',
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(2);
   });
 
   test('Debe devolver 500 si ocurre un error interno', async () => {
     const spy = vi
-      .spyOn(staffService, 'modifyStaff')
-      .mockRejectedValueOnce(
-        new Error('Fallo interno'),
-      );
+      .spyOn(staffService, 'readStaff')
+      .mockRejectedValueOnce(new Error('Fallo interno'));
 
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        floor: 10,
-      });
+    const res = await request(app).get('/staff');
 
     expect(res.status).toBe(500);
-
-    expect(res.body.error).toBe(
-      'Fallo interno',
-    );
+    expect(res.body.error).toBe('Fallo interno');
 
     spy.mockRestore();
   });
 
-  test('Debe devolver 500 si ocurre un error desconocido', async () => {
+  test('Debe devolver 400 si ocurre un ValidationError', async () => {
+    const validationError = new mongoose.Error.ValidationError();
+
     const spy = vi
-      .spyOn(staffService, 'modifyStaff')
-      .mockRejectedValueOnce('error raro');
+      .spyOn(staffService, 'readStaff')
+      .mockRejectedValueOnce(validationError);
 
-    const res = await request(app)
-      .patch('/staff')
-      .query({ name: 'Dr Test' })
-      .send({
-        floor: 10,
-      });
+    const res = await request(app).get('/staff');
 
-    expect(res.status).toBe(500);
-
-    expect(res.body.error).toBe(
-      'Internal Server Error',
-    );
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('Validation failed');
 
     spy.mockRestore();
   });

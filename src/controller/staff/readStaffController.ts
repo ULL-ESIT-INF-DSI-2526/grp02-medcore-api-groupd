@@ -1,7 +1,7 @@
-import type { StaffFilter } from '../../models/staff/types/StaffFilter.js';
 import { readStaff } from '../../services/staff/readStaff.js';
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
+import Staff from '../../models/staff/staffInterface.js'
 
 /**
  * Controlador para leer miembros del personal.
@@ -13,12 +13,12 @@ export async function readStaffController(req: Request, res: Response) {
   try {
     const { name, specialty } = req.query;
 
-    const filter: StaffFilter = {};
+    const filter: Partial<Staff> = {};
     if (typeof name === 'string' && name.trim() !== '') {
       filter.name = name;
     }
     if (typeof specialty === 'string' && specialty.trim() !== '') {
-      filter.speciality = specialty;
+      filter.specialty = specialty as Staff['specialty'];
     }
     const result = await readStaff(filter);
     return res.status(200).json(result);

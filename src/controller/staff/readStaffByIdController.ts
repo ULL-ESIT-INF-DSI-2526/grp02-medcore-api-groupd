@@ -10,6 +10,9 @@ import { readStaffById } from '../../services/staff/readStaffById.js';
 export async function readStaffByIdController(req : { params: { id: string } }, res : Response) {
     try {
         const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
         const objectId_ = new mongoose.Types.ObjectId(id);
         const result = await readStaffById(objectId_);
         if (!result) {
