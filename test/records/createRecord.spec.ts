@@ -232,4 +232,80 @@ describe('Pruebas para el controlador de createRecord', () => {
 
     spy.mockRestore();
   });
+
+  describe('Tests para comprobar los validadores', () => {
+    test('La fecha de finalización no puede ser en el futuro', async () => {
+      const notValidRecordBody = {
+        idenNumber: '12345678Z',
+        medicalLicenseNumber: 11111,
+        regType: 'ambulatory',
+        admissionReason: 'Fiebre alta',
+        diagnosis: 'Gripe común',
+        medications: [
+          {
+            natCode: '111111',
+            amount: 2,
+            instructions: '1 pastilla cada 8 horas',
+          },
+        ],
+        endDate: '2033-05-15',
+      };
+
+      const res = await request(app).post('/records').send(notValidRecordBody);
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual(
+        'Record validation failed: endDate: La fecha de finalización no puede ser en el futuro',
+      );
+    });
+
+    test('LA fecha de finalización no puede ser anterior a la de inicio', async () => {
+      const notValidRecordBody = {
+        idenNumber: '12345678Z',
+        medicalLicenseNumber: 11111,
+        regType: 'ambulatory',
+        admissionReason: 'Fiebre alta',
+        diagnosis: 'Gripe común',
+        medications: [
+          {
+            natCode: '111111',
+            amount: 2,
+            instructions: '1 pastilla cada 8 horas',
+          },
+        ],
+        endDate: '2025-05-15',
+      };
+
+      const res = await request(app).post('/records').send(notValidRecordBody);
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual(
+        'Record validation failed: endDate: La fecha de finalización no puede ser anterior a la fecha de inicio',
+      );
+    });
+    test('El estado no puede ser cerrado ni fecha de finalización', async () => {
+      const notValidRecordBody = {
+        idenNumber: '12345678Z',
+        medicalLicenseNumber: 11111,
+        regType: 'ambulatory',
+        admissionReason: 'Fiebre alta',
+        diagnosis: 'Gripe común',
+        medications: [
+          {
+            natCode: '111111',
+            amount: 2,
+            instructions: '1 pastilla cada 8 horas',
+          },
+        ],
+        status: 'closed',
+      };
+
+      const res = await request(app).post('/records').send(notValidRecordBody);
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toEqual(
+        'Record validation failed: status: Un registro cerrado debe tener una fecha de finalización',
+      );
+    });
+  });
 });

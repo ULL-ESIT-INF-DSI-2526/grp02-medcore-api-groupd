@@ -5,12 +5,23 @@ import { Staff } from '../../models/staff/staffSchema.js';
 import { Medication } from '../../models/medications/medicationSchema.js';
 import { prescribedMed } from '../../models/records/prescibedMed.js';
 
+/**
+ * Crea un nuevo registro médico para un paciente, asignado a un doctor específico,
+ * con una lista opcional de medicamentos prescritos.
+ */
 interface medInfo {
   natCode: string;
   amount: number;
   instructions: string;
 }
 
+/**
+ * Procesa la lista de medicamentos prescritos, verificando su existencia, validez y stock,
+ * y calcula el costo total de los medicamentos. Si algún medicamento no es válido, está vencido o no tiene suficiente stock,
+ * se lanzará un error específico.
+ * @param medications - Lista de medicamentos a procesar, cada uno con su código nacional, cantidad e instrucciones.
+ * @returns Objeto con los medicamentos procesados y el costo total.
+ */
 async function processMedication(medications: medInfo[]) {
   const processedMedications = [];
   const medsToSave = [];
@@ -46,6 +57,24 @@ async function processMedication(medications: medInfo[]) {
   return { processedMedications, totalCost };
 }
 
+/**
+ * Crea un nuevo registro médico para un paciente, asignado a un doctor específico,
+ * con una lista opcional de medicamentos prescritos.
+ * @param req - La solicitud HTTP que contiene los datos necesarios para crear el registro,
+ *              incluyendo el DNI del paciente, número de licencia médica del doctor, tipo de registro,
+ *              motivo de admisión, diagnóstico, lista de medicamentos, fecha de finalización y estado.
+ * @param res - La respuesta HTTP que se enviará al cliente con el resultado de la operación,
+ *              incluyendo el nuevo registro creado o un mensaje de error en caso de fallo.
+ * @returns JSON con el nuevo registro creado o un mensaje de error en caso de fallo.
+ *
+ * @throws Error - Si ocurre un error inesperado durante la creación del registro, o si algún medicamento no es válido, está vencido o no tiene suficiente stock.
+ *
+ * Códigos de estado HTTP:
+ * - 201: Registro creado exitosamente.
+ * - 400: Formato de datos inválido o paciente/doctor no activo.
+ * - 404: Paciente o doctor no encontrado, o medicamento no encontrado.
+ * - 500: Error interno del servidor.
+ */
 export async function createRecord(req: Request, res: Response) {
   try {
     const patientDNI: string = req.body.idenNumber;
@@ -94,6 +123,8 @@ export async function createRecord(req: Request, res: Response) {
       diagnosis: req.body.diagnosis,
       medicationList: finalMedications,
       totalPrice: finalCost,
+      endDate: req.body.endDate,
+      status: req.body.status,
     });
 
     return res.status(201).json(newRecord);
