@@ -81,7 +81,7 @@ medicationRouter.get('/:id', (req, res) => {
  *  delete:
  *    summary: Delete a medication by ID
  *    tags:
- * - Medications
+ *      - Medications
  *    parameters:
  *      - in: path
  *        name: id
@@ -94,6 +94,8 @@ medicationRouter.get('/:id', (req, res) => {
  *        description: Medication deleted successfully
  *      404:
  *        description: Medication not found
+ *      400:
+ *        description: Invalid ID format
  */
 medicationRouter.delete('/:id', (req, res) => {
   deleteMedicationbyId(req, res);
@@ -108,16 +110,18 @@ medicationRouter.delete('/:id', (req, res) => {
  *      - Medications
  *    parameters:
  *      - in: query
- *      name: natCode
- *      required: true
- *      schema:
- *        type: string
- *      description: National code of the medication
+ *        name: natCode
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: National code of the medication
  *    responses:
  *      200:
  *        description: Medication deleted successfully
  *      404:
  *        description: Medication not found
+ *      400:
+ *        description: Invalid filter format
  */
 medicationRouter.delete('/', (req, res) => {
   deleteMedication(req, res);
