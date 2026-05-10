@@ -2,6 +2,18 @@ import { Request, Response } from 'express';
 import { Medication } from '../../models/medications/medicationSchema.js';
 import mongoose from 'mongoose';
 
+/**
+ * Actualiza un medicamento existente identificado por su ID de MongoDB.
+ * @param req - Objeto de petición de Express. 
+ *              Debe contener el ID en `req.params.id` y los campos a actualizar en `req.body`.
+ * @param res - Objeto de respuesta de Express.
+ * 
+ * @returns
+ * - **200 (OK)**: Objeto del medicamento actualizado correctamente.
+ * - **400 (Bad Request)**: Si el formato del ID de MongoDB no es válido.
+ * - **404 (Not Found)**: Si no existe ningún medicamento con el ID proporcionado.
+ * - **500 (Internal Server Error)**: Error inesperado durante el proceso de actualización.
+ */
 export async function modifyMedicationbyId(req: Request, res: Response) {
   try {
     const id = req.params.id as string;

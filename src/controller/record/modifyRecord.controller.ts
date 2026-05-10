@@ -4,8 +4,10 @@ import { Record } from '../../models/records/recordSchema.js';
 import { Medication } from '../../models/medications/medicationSchema.js';
 
 /**
- * Función auxiliar para procesar la nueva medicación:
- * Verifica existencia, stock y calcula el coste.
+ * Valida la disponibilidad de medicamentos, actualiza su stock y calcula el coste total.
+ * @param newMeds - Array de objetos con la medicación (debe incluir `natCode`, `amount` e `instructions`).
+ * @returns Un objeto que contiene la lista procesada con IDs de MongoDB y el coste total calculado.
+ * @throws {Error} Si un medicamento no existe o si no hay stock suficiente.
  */
 async function validateAndProcessNewMeds(newMeds: any[]) {
   let totalCost = 0;
@@ -29,7 +31,13 @@ async function validateAndProcessNewMeds(newMeds: any[]) {
 }
 
 /**
- * Función auxiliar para devolver el stock antiguo
+ * Incrementa el stock de los medicamentos devueltos al sistema.
+ * 
+ * @remarks
+ * Se utiliza al modificar o eliminar un registro para reintegrar las unidades 
+ * que fueron previamente descontadas.
+ * 
+ * @param oldMedList - Lista de medicamentos del registro anterior (contiene referencias `_id` y cantidades).
  */
 async function restoreOldStock(oldMedList: any[]) {
   for (const item of oldMedList) {
@@ -41,6 +49,17 @@ async function restoreOldStock(oldMedList: any[]) {
   }
 }
 
+/**
+ * Controlador para modificar un registro médico existente.
+ * @param req - Objeto de petición de Express. `req.params.id` debe ser el ID del registro.
+ * @param res - Objeto de respuesta de Express.
+ * 
+ * @returns
+ * - **200**: Registro actualizado con éxito.
+ * - **400**: Error en validación de ID o falta de stock en la nueva medicación.
+ * - **404**: Registro no encontrado.
+ * - **500**: Error interno del servidor.
+ */
 export async function modifyRecord(req: Request, res: Response) {
   try {
     const { id } = req.params;

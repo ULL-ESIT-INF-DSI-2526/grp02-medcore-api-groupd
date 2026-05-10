@@ -2,6 +2,17 @@ import { Request, Response } from 'express';
 import { Medication } from '../../models/medications/medicationSchema.js';
 import mongoose from 'mongoose';
 
+/**
+ * Obtiene un medicamento específico de la base de datos utilizando su identificador único.
+ * @param req - Objeto de petición de Express. Se espera que contenga el parámetro `id` en `req.params`.
+ * @param res - Objeto de respuesta de Express utilizado para enviar el medicamento o el error.
+ * 
+ * @returns 
+ * - **200 (OK)**: Retorna el documento del medicamento si se encuentra.
+ * - **400 (Bad Request)**: Si el formato del ID de MongoDB proporcionado no es válido.
+ * - **404 (Not Found)**: Si no existe ningún medicamento con el ID proporcionado.
+ * - **500 (Internal Server Error)**: Si ocurre un error inesperado durante la consulta.
+ */
 export async function getMedicationbyId(req: Request, res: Response) {
   try {
     const id = req.params.id as string;

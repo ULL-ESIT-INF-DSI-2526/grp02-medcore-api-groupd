@@ -1,7 +1,20 @@
 import { Request, Response } from 'express';
 import { Medication } from '../../models/medications/medicationSchema.js';
-import mongoose from 'mongoose';
 
+/**
+ * Controlador para buscar y leer medicamentos basados en filtros de consulta.
+ * @param req - Objeto de petición de Express.
+ *    - `req.query.name`: Nombre comercial del medicamento.
+ *    - `req.query.ingredient`: Principio activo del medicamento.
+ *    - `req.query.code`: Código nacional (búsqueda exacta).
+ * @param res - Objeto de respuesta de Express.
+ * 
+ * @returns
+ * - **200 (OK)**: Un array con los medicamentos que coinciden con los criterios.
+ * - **400 (Bad Request)**: Si no se proporciona ningún parámetro de filtrado.
+ * - **404 (Not Found)**: Si la búsqueda no devuelve ningún resultado.
+ * - **500 (Internal Server Error)**: Si ocurre un error inesperado durante la consulta.
+ */
 export async function readMedications(req: Request, res: Response) {
   try {
     const { name, ingredient, code } = req.query;

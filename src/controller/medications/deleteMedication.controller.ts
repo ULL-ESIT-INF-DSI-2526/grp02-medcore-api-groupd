@@ -1,6 +1,19 @@
 import { Request, Response } from 'express';
 import { Medication } from '../../models/medications/medicationSchema.js';
 
+/**
+ * Elimina medicamentos de la base de datos basándose en filtros de búsqueda.
+ * 
+ * @param req - Objeto de petición de Express. 
+ * Se esperan los parámetros `name`, `ingredient` o `code` en `req.query`.
+ * @param res - Objeto de respuesta de Express.
+ * 
+ * @returns
+ * - **200 (OK)**: Devuelve un objeto con el conteo de documentos eliminados (`deletedCount`).
+ * - **400 (Bad Request)**: Si no se proporciona ningún parámetro de filtrado.
+ * - **404 (Not Found)**: Si no se encuentran medicamentos que coincidan con los filtros.
+ * - **500 (Internal Server Error)**: Si ocurre un error inesperado durante la operación.
+ */
 export async function deleteMedication(req: Request, res: Response) {
   try {
     const { name, ingredient, code } = req.query;

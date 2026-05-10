@@ -19,8 +19,22 @@ async function restoreMedicationStock(medicationList: any[]) {
 }
 
 /**
- * Controlador para borrar un registro médico.
- * Implementa la reversion de stock de medicamentos.
+ * Elimina un registro médico de la base de datos y restaura el inventario de medicamentos.
+ * 
+ * @remarks
+ * Esta función no solo realiza una eliminación física del registro, sino que también
+ * garantiza la integridad del inventario llamando a {@link restoreMedicationStock}.
+ * Si el registro contiene medicamentos prescritos, las cantidades se suman de nuevo
+ * al stock actual en la colección de medicamentos.
+ * 
+ * @param req - Objeto de petición de Express. Se espera que `req.params.id` contenga el ID del registro.
+ * @param res - Objeto de respuesta de Express.
+ * 
+ * @returns 
+ * - **200 (OK)**: Si el registro se eliminó y el stock se restauró correctamente.
+ * - **400 (Bad Request)**: Si el formato del ID proporcionado no es un ObjectId de MongoDB válido.
+ * - **404 (Not Found)**: Si no se encuentra ningún registro con el ID suministrado.
+ * - **500 (Internal Server Error)**: Si ocurre un error inesperado durante el proceso.
  */
 export async function deleteRecord(req: Request, res: Response) {
 try {

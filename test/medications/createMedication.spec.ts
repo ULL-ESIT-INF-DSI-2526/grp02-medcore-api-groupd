@@ -61,7 +61,7 @@ describe('Pruebas para el controlador de creación de medicamentos', () => {
   });
 
   test('Debe rechazar datos incompletos', async () => {
-    const res = await request(app).post('/medications').send(med1);
+    const res = await request(app).post('/medications').send(med_incompleta);
     expect(res.status).toBe(400);
   });
 });
