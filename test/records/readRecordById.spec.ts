@@ -22,7 +22,6 @@ import { Medication } from '../../src/models/medications/medicationSchema';
 import * as recordService from '../../src/services/record/readRecordById.js';
 
 describe('Pruebas para readRecordByIdController', () => {
-
   beforeAll(async () => {
     await connectDB();
   });
@@ -55,7 +54,11 @@ describe('Pruebas para readRecordByIdController', () => {
       birthDate: new Date('1990-01-01'),
       SSId: '123456789',
       gender: 'other',
-      contactData: { address: 'Calle 1', phoneNumber: '600123456', email: 'p1@test.com' },
+      contactData: {
+        address: 'Calle 1',
+        phoneNumber: '600123456',
+        email: 'p1@test.com',
+      },
       knownAllergies: [],
       bloodType: '0+',
       status: 'active',
@@ -92,16 +95,17 @@ describe('Pruebas para readRecordByIdController', () => {
   });
 
   test('Debe devolver 200 y el record si existe', async () => {
-    const createdRecord = await Record.create({ ...validRecord, patient: patientId, doctor: doctorId });
+    const createdRecord = await Record.create({
+      ...validRecord,
+      patient: patientId,
+      doctor: doctorId,
+    });
 
-    const res = await request(app)
-      .get(`/${createdRecord._id}`);
+    const res = await request(app).get(`/records/${createdRecord._id}`);
 
     expect(res.status).toBe(200);
 
-    expect(res.body._id).toBe(
-      createdRecord._id.toString(),
-    );
+    expect(res.body._id).toBe(createdRecord._id.toString());
 
     expect(res.body.diagnosis).toBe('Gastritis');
   });
@@ -109,27 +113,21 @@ describe('Pruebas para readRecordByIdController', () => {
   test('Debe devolver 404 si el record no existe', async () => {
     const fakeId = new mongoose.Types.ObjectId();
 
-    const res = await request(app)
-      .get(`/${fakeId}`);
+    const res = await request(app).get(`/records/${fakeId}`);
 
     expect(res.status).toBe(404);
 
-    expect(res.body.error).toBe(
-      'Record not found',
-    );
+    expect(res.body.error).toBe('Record not found');
   });
 
   test('Debe devolver 400 si el id no es válido', async () => {
     const invalidId = 'id-invalido';
 
-    const res = await request(app)
-      .get(`/${invalidId}`);
+    const res = await request(app).get(`/records/${invalidId}`);
 
     expect(res.status).toBe(400);
 
-    expect(res.body.error).toBe(
-      'Invalid record ID',
-    );
+    expect(res.body.error).toBe('Invalid record ID');
   });
 
   test('Debe devolver 500 si ocurre un error interno', async () => {
@@ -137,18 +135,13 @@ describe('Pruebas para readRecordByIdController', () => {
 
     const spy = vi
       .spyOn(recordService, 'readRecordById')
-      .mockRejectedValueOnce(
-        new Error('Error interno leyendo record'),
-      );
+      .mockRejectedValueOnce(new Error('Error interno leyendo record'));
 
-    const res = await request(app)
-      .get(`/${validId}`);
+    const res = await request(app).get(`/records/${validId}`);
 
     expect(res.status).toBe(500);
 
-    expect(res.body.error).toBe(
-      'Error interno leyendo record',
-    );
+    expect(res.body.error).toBe('Error interno leyendo record');
 
     spy.mockRestore();
   });
@@ -160,14 +153,11 @@ describe('Pruebas para readRecordByIdController', () => {
       .spyOn(recordService, 'readRecordById')
       .mockRejectedValueOnce('error raro');
 
-    const res = await request(app)
-      .get(`/${validId}`);
+    const res = await request(app).get(`/records/${validId}`);
 
     expect(res.status).toBe(500);
 
-    expect(res.body.error).toBe(
-      'Internal server error',
-    );
+    expect(res.body.error).toBe('Internal server error');
 
     spy.mockRestore();
   });
@@ -187,8 +177,7 @@ describe('Pruebas para readRecordByIdController', () => {
       totalPrice: 15,
     });
 
-    const res = await request(app)
-      .get(`/${createdRecord._id}`);
+    const res = await request(app).get(`/records/${createdRecord._id}`);
 
     expect(res.status).toBe(200);
 
@@ -196,5 +185,4 @@ describe('Pruebas para readRecordByIdController', () => {
 
     expect(res.body.totalPrice).toBe(15);
   });
-
 });

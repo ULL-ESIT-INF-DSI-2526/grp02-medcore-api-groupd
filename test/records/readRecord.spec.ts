@@ -21,7 +21,6 @@ import { Record } from '../../src/models/records/recordSchema';
 import * as recordService from '../../src/services/record/readRecord.js';
 
 describe('Pruebas para readRecordController', () => {
-
   let patientId: mongoose.Types.ObjectId;
   let doctorId: mongoose.Types.ObjectId;
   let secondPatientId: mongoose.Types.ObjectId;
@@ -131,7 +130,7 @@ describe('Pruebas para readRecordController', () => {
   });
 
   test('Debe devolver todos los registros si no se pasan filtros', async () => {
-    const res = await request(app).get('/');
+    const res = await request(app).get('/records');
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(2);
@@ -139,7 +138,7 @@ describe('Pruebas para readRecordController', () => {
 
   test('Debe filtrar registros por paciente', async () => {
     const res = await request(app)
-      .get('/')
+      .get('/records')
       .query({ patient: patientId.toString() });
 
     expect(res.status).toBe(200);
@@ -151,7 +150,7 @@ describe('Pruebas para readRecordController', () => {
 
   test('Debe filtrar registros por doctor', async () => {
     const res = await request(app)
-      .get('/')
+      .get('/records')
       .query({ doctor: secondDoctorId.toString() });
 
     expect(res.status).toBe(200);
@@ -162,12 +161,10 @@ describe('Pruebas para readRecordController', () => {
   });
 
   test('Debe filtrar por paciente y doctor simultáneamente', async () => {
-    const res = await request(app)
-      .get('/')
-      .query({
-        patient: patientId.toString(),
-        doctor: doctorId.toString(),
-      });
+    const res = await request(app).get('/records').query({
+      patient: patientId.toString(),
+      doctor: doctorId.toString(),
+    });
 
     expect(res.status).toBe(200);
 
@@ -177,11 +174,9 @@ describe('Pruebas para readRecordController', () => {
   });
 
   test('Debe devolver array vacío si no hay coincidencias', async () => {
-    const res = await request(app)
-      .get('/')
-      .query({
-        patient: new mongoose.Types.ObjectId().toString(),
-      });
+    const res = await request(app).get('/records').query({
+      patient: new mongoose.Types.ObjectId().toString(),
+    });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -189,7 +184,7 @@ describe('Pruebas para readRecordController', () => {
 
   test('Debe ignorar filtros inválidos que no sean string', async () => {
     const res = await request(app)
-      .get('/')
+      .get('/records')
       .query({
         patient: ['12345'],
       });
@@ -204,7 +199,7 @@ describe('Pruebas para readRecordController', () => {
       .spyOn(recordService, 'readRecord')
       .mockRejectedValueOnce(new Error('Fallo interno leyendo records'));
 
-    const res = await request(app).get('/');
+    const res = await request(app).get('/records');
 
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Fallo interno leyendo records');
@@ -217,12 +212,11 @@ describe('Pruebas para readRecordController', () => {
       .spyOn(recordService, 'readRecord')
       .mockRejectedValueOnce('error raro');
 
-    const res = await request(app).get('/');
+    const res = await request(app).get('/records');
 
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Error reading records');
 
     spy.mockRestore();
   });
-
 });
